@@ -1,5 +1,5 @@
 from classes.window import Window
-from classes.chapes import Cube, Quad, Triangle
+from classes.shapes import Cube, Quad, Triangle
 
 if __name__ == '__main__':
     window = Window(1200, 768, 'House')
