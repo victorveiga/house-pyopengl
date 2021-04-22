@@ -56,7 +56,7 @@ class Window:
             raise Exception("glfw can not be initialized!")
 
         # creating the window
-        self._window = glfw.create_window(1280, 720, "My OpenGL window", None, None)
+        self._window = glfw.create_window(width, height, title, None, None)
 
         # check if window was created
         if not self._window:
@@ -73,7 +73,7 @@ class Window:
         glfw.make_context_current(self._window)
 
         self._create_shader()
-        glClearColor(179/255, 205/255, 224/255, 1)
+        glClearColor(150/255, 213/255, 120/255, 1)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -103,8 +103,8 @@ class Window:
         glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, self.projection)
         glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, self.view)
 
-    def addElement(self, element):
-        self.__ElementsList.append(element)
+    def addElement(self, element, cordinates):
+        self.__ElementsList.append(element(self.model_loc, self.switcher_loc, cordinates))
 
     def main_loop(self):
         # the main application loop
@@ -112,9 +112,9 @@ class Window:
             glfw.poll_events()
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-            glUniform1i(self.switcher_loc, 0)
 
             for element in self.__ElementsList:
+                glUniform1i(self.switcher_loc, 0)
                 element.draw()
 
             glfw.swap_buffers(self._window)
