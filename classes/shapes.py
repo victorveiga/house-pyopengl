@@ -42,6 +42,12 @@ class ShapeBase:
     def _setPosition(self, position):
         self._position = pyrr.matrix44.create_from_translation(pyrr.Vector3(position))
 
+    def _setModel_loc(self, model_loc):
+        self._model_loc = model_loc
+
+    def _setSwitcher_loc(self, switcher_loc):
+        self._switcher_loc = switcher_loc
+
     def _getPosition(self):
         return self._position
 
@@ -323,7 +329,7 @@ class Path(ShapeBase):
         glUniformMatrix4fv(super()._getModel_loc(), 1, GL_FALSE, super()._getPosition())
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
 
-class Window1(ShapeBase):
+class WindowObj(ShapeBase):
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
         super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
         quad_vertices = [-0.2, -0.1, 0, 0.0, 0.0,
@@ -342,21 +348,46 @@ class Window1(ShapeBase):
 
         load_texture("textures/window.webp", super()._getTexture())
 
-class Window2(ShapeBase):
+class Garden(ShapeBase):
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
         super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
-        quad_vertices = [-0.2, -0.1, 0, 0.0, 0.0,
-                          0.4, -0.1, 0, 1.0, 0.0,
-                          0.4, 0.3, 0, 1.0, 1.0,
-                         -0.2, 0.3, 0, 0.0, 1.0]
+        vertices = [-2, -1, 0.0, 150/255, 213/255, 120/255,
+                     5.0, -1, 0.0, 150/255, 213/255, 120/255,
+                    -2,  0.0, 0.0, 150/255, 213/255, 120/255,
+                     5.0,  0.0, 0.0, 150/255, 213/255, 120/255]
 
-        quad_indices = [0, 1, 2, 2, 3, 0]
-        super()._handleObject(quad_vertices, quad_indices)
+        super()._handleObject(vertices, [])
 
         glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
 
-        glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(12))
+        glEnableVertexAttribArray(2)
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(12))
 
-        load_texture("textures/window.webp", super()._getTexture())
+    def draw(self):
+        glUniform1i(super()._getSwitcher_loc(), 1)
+        glBindVertexArray(super()._getVAO())
+        glUniformMatrix4fv(super()._getModel_loc(), 1, GL_FALSE, super()._getPosition())
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
+
+class Sky(ShapeBase):
+    def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        vertices = [-2, -1, 0.0, 173/255, 203/255, 227/255,
+                     5.0, -1, 0.0, 173/255, 203/255, 227/255,
+                    -2,  1, 0.0, 173/255, 203/255, 227/255,
+                     5.0,  1, 0.0, 173/255, 203/255, 227/255]
+
+        super()._handleObject(vertices, [])
+
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
+
+        glEnableVertexAttribArray(2)
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(12))
+
+    def draw(self):
+        glUniform1i(super()._getSwitcher_loc(), 1)
+        glBindVertexArray(super()._getVAO())
+        glUniformMatrix4fv(super()._getModel_loc(), 1, GL_FALSE, super()._getPosition())
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)

@@ -73,7 +73,7 @@ class Window:
         glfw.make_context_current(self._window)
 
         self._create_shader()
-        glClearColor(150/255, 213/255, 120/255, 1)
+        glClearColor(1/255, 31/255, 75/255, 1)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
