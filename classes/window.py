@@ -3,6 +3,7 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 import OpenGL.GLUT as glut
 import pyrr
+from .shapes2D import DayNightTimeBase
 
 vertex_src = """
 # version 330
@@ -86,14 +87,23 @@ class Window:
         glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, self.view)
 
     def __keyboard(self, key, x, y ):
-        print("TECLA PRESSIONADA: {}".format(key))
-        if key == b'\x1b': # ESC
-            sys.exit( ) 
+        if key == b'\x1b': # ESC key pressed
+            sys.exit()
 
-    def __display(self):
+        if key.lower() == b'n': # N key pressed
+            self.__display(False)
+
+        if key.lower() == b'd': # D key pressed
+            self.__display(True)
+
+    def __display(self, Daytime: bool = True):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         for element in self.__ElementsList:
+
+            if isinstance(element, DayNightTimeBase):
+                element.setDaytime(Daytime)
+
             glUniform1i(self.switcher_loc, 0)
             element.draw()
 
