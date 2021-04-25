@@ -1,20 +1,20 @@
 from classes.window import Window
-from classes.shapes import Cube, Quad, Triangle, Roof1, Roof2, Wall1, Wall2, Door, DoorHandle, Path, WindowObj, Garden, Sky
+import classes.shapes2D as shapes
 
 if __name__ == '__main__':
-    window = Window(1200, 768, 'House')
+    window = Window(1300, 768, 'House 2D simulation')
 
-    window.addElement(Roof1, [-1, 0.8, 1])
-    window.addElement(Roof2, [0, 0.8, 1])
-    window.addElement(Wall1, [-1, -0.2, 1])
-    window.addElement(Wall2, [0, -0.2, 1])
-    window.addElement(Door, [-1.2, -0.2, 1.01])
-    window.addElement(DoorHandle, [-1.3, -0.35, 1.011])
-    window.addElement(Path, [-1.2, -0.9, 1.011])
-    window.addElement(WindowObj, [-0.1, -0.2, 1.01])
-    window.addElement(WindowObj, [1.3, -0.2, 1.01])
-    
-    window.addElement(Garden, [-1.2, -0.3, 1.0])
-    window.addElement(Sky, [-1.2, 0.7, 1.0])
+    window.addElement(shapes.Roof1, [-1, 0.8, 1])
+    window.addElement(shapes.Roof2, [0, 0.8, 1])
+    window.addElement(shapes.Wall1, [-1, -0.2, 1])
+    window.addElement(shapes.Wall2, [0, -0.2, 1])
+    window.addElement(shapes.Door, [-1.2, -0.2, 1.01])
+    window.addElement(shapes.DoorHandle, [-1.3, -0.35, 1.011])
+    window.addElement(shapes.Path, [-1.2, -0.9, 1.011])
+    window.addElement(shapes.WindowObj, [-0.1, -0.2, 1.01])
+    window.addElement(shapes.WindowObj, [1.3, -0.2, 1.01])
 
-    window.main_loop()
+    window.addElement(shapes.Garden, [-1.2, -0.3, 1.0])
+    window.addElement(shapes.Sky, [-1.2, 0.7, 1.0])
+
+    window.execute()

@@ -1,7 +1,7 @@
-import glfw
+import sys
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
-import numpy as np
+import OpenGL.GLUT as glut
 import pyrr
 
 vertex_src = """
@@ -51,26 +51,14 @@ void main()
 
 class Window:
     def __init__(self, width: int, height: int, title: str):
-        # initializing glfw library
-        if not glfw.init():
-            raise Exception("glfw can not be initialized!")
-
-        # creating the window
-        self._window = glfw.create_window(width, height, title, None, None)
-
-        # check if window was created
-        if not self._window:
-            glfw.terminate()
-            raise Exception("glfw window can not be created!")
-
-        # set window's position
-        glfw.set_window_pos(self._window, 400, 200)
-
-        # set the callback function for window resize
-        glfw.set_window_size_callback(self._window, self._window_resize)
-
-        # make the context current
-        glfw.make_context_current(self._window)
+        glut.glutInit()
+        glut.glutInitDisplayMode(glut.GLUT_DOUBLE | glut.GLUT_RGBA)
+        glut.glutInitWindowSize(width, height)
+        glut.glutInitWindowPosition(0,0)
+        glut.glutCreateWindow(title)
+        glut.glutReshapeFunc(self.__window_resize)
+        glut.glutDisplayFunc(self.__display)
+        glut.glutKeyboardFunc(self.__keyboard)
 
         self._create_shader()
         glClearColor(1/255, 31/255, 75/255, 1)
@@ -79,12 +67,6 @@ class Window:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         self.__ElementsList = []
-
-    # glfw callback functions
-    def _window_resize(self, window, width, height):
-        glViewport(0, 0, width, height)
-        projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, 0.1, 100)
-        glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, projection)
 
     def _create_shader(self):
         shader = compileProgram(compileShader(vertex_src, GL_VERTEX_SHADER), compileShader(fragment_src, GL_FRAGMENT_SHADER))
@@ -103,21 +85,27 @@ class Window:
         glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, self.projection)
         glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, self.view)
 
+    def __keyboard(self, key, x, y ):
+        print("TECLA PRESSIONADA: {}".format(key))
+        if key == b'\x1b': # ESC
+            sys.exit( ) 
+
+    def __display(self):
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+        for element in self.__ElementsList:
+            glUniform1i(self.switcher_loc, 0)
+            element.draw()
+
+        glut.glutSwapBuffers()
+
+    def __window_resize(self, width,height):
+        glViewport(0, 0, width, height)
+        projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, 0.1, 100)
+        glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, projection)
+
     def addElement(self, element, cordinates):
         self.__ElementsList.append(element(self.model_loc, self.switcher_loc, cordinates))
 
-    def main_loop(self):
-        # the main application loop
-        while not glfw.window_should_close(self._window):
-            glfw.poll_events()
-
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-            for element in self.__ElementsList:
-                glUniform1i(self.switcher_loc, 0)
-                element.draw()
-
-            glfw.swap_buffers(self._window)
-
-        # terminate glfw, free up allocated resources
-        glfw.terminate()
+    def execute(self):
+        glut.glutMainLoop()
