@@ -3,7 +3,8 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 import OpenGL.GLUT as glut
 import pyrr
-from .parents import DayNightTimeBase
+from .parents import DayNightTimeBase, DaytimeBase, NighttimeBase
+import numpy as np
 
 vertex_src = """
 # version 330
@@ -52,6 +53,8 @@ void main()
 
 class Window:
     def __init__(self, width: int, height: int, title: str):
+        self.__Daytime = True
+
         glut.glutInit()
         glut.glutInitDisplayMode(glut.GLUT_DOUBLE | glut.GLUT_RGBA)
         glut.glutInitWindowSize(width, height)
@@ -62,12 +65,18 @@ class Window:
         glut.glutKeyboardFunc(self.__keyboard)
 
         self._create_shader()
-        glClearColor(1/255, 31/255, 75/255, 1)
+        self.__setSky(True)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         self.__ElementsList = []
+
+    def __setSky(self, Daytime:bool):
+        if (Daytime == True):
+            glClearColor(173/255, 203/255, 227/255, 1) # blue sky
+        else:
+            glClearColor(0/255, 3/255, 22/255, 1) # midnight blue sky
 
     def _create_shader(self):
         shader = compileProgram(compileShader(vertex_src, GL_VERTEX_SHADER), compileShader(fragment_src, GL_FRAGMENT_SHADER))
@@ -91,21 +100,32 @@ class Window:
             sys.exit()
 
         if key.lower() == b'n': # N key pressed
-            self.__display(False)
+            self.__Daytime = False
+            self.__display()
 
         if key.lower() == b'd': # D key pressed
-            self.__display(True)
+            self.__Daytime = True
+            self.__display()
 
-    def __display(self, Daytime: bool = True):
+    def __display(self):
+        self.__setSky(self.__Daytime)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         for element in self.__ElementsList:
 
             if isinstance(element, DayNightTimeBase):
-                element.setDaytime(Daytime)
+                element.setDaytime(self.__Daytime)
 
             glUniform1i(self.switcher_loc, 0)
-            element.draw()
+
+            if isinstance(element, DaytimeBase):
+                if self.__Daytime == True:
+                    element.draw()
+            elif isinstance(element, NighttimeBase):
+                if self.__Daytime == False:
+                    element.draw()
+            else:
+                element.draw()
 
         glut.glutSwapBuffers()
 

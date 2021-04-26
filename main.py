@@ -16,9 +16,15 @@ if __name__ == '__main__':
     window.addElement(shapes2D.WindowObj, [1.3, -0.2, 1.01])
 
     window.addElement(shapes2D.Garden, [-1.2, -0.3, 1.0])
-    window.addElement(shapes2D.Sky, [-1.2, 0.7, 1.0])
 
-    
-    window.addElement(shapes3D.Cube, [1,0,0])
+    # Stars
+    window.addElement(shapes2D.Star, [1,2,-3])
+    window.addElement(shapes2D.Star, [2,2,-4])
+    window.addElement(shapes2D.Star, [3,2,-3])
+    window.addElement(shapes2D.Star, [3.1,2,-4])
+    window.addElement(shapes2D.Star, [-1,2.2,-5])
+    window.addElement(shapes2D.Star, [-3,2,-3])
+    window.addElement(shapes2D.Star, [-4,2,-4])
+    window.addElement(shapes2D.Star, [3,2,0])
 
     window.execute()

@@ -6,6 +6,12 @@ from utils.TextureLoader import load_texture
 class DayNightTimeBase:
     pass
 
+class DaytimeBase:
+    pass
+
+class NighttimeBase:
+    pass
+
 class ShapeBase:
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
         self.vertices = None

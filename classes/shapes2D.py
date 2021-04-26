@@ -1,6 +1,7 @@
 from OpenGL.GL import *
 from utils.TextureLoader import load_texture
-from .parents import ShapeBase, DayNightTimeBase
+from .parents import ShapeBase, DayNightTimeBase, DaytimeBase, NighttimeBase
+import numpy as np
 
 class Roof1(ShapeBase):
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
@@ -126,23 +127,62 @@ class Garden(ShapeBase, DayNightTimeBase):
         self.__Daytime = Daytime
         super()._handleObject(self._getCustomVertices(), [])
 
-class Sky(ShapeBase, DayNightTimeBase):
+class Sun(DaytimeBase):
+    pass
+
+class Cloud(DaytimeBase):
+    pass
+
+class Star(ShapeBase, NighttimeBase):
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
-        self.__Daytime = True
         super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        color    = [1,1,1]
+        vertices = [-0.60, 0.77, 0, *color,
+                    -0.68, 0.77, 0, *color,
+                    -0.70, 0.68, 0, *color,
+                    -0.64, 0.63, 0, *color,
+                    -0.58, 0.68, 0, *color ]
+
+        super()._handleObject(vertices, [])
+        super()._setDefaultShape(GL_POLYGON)
+
+class Moon(ShapeBase, NighttimeBase):
+    def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        color    = [1,1,1]
+        vertices = [-0.60, 0.77, 0, *color,
+                    -0.68, 0.77, 0, *color,
+                    -0.70, 0.68, 0, *color,
+                    -0.64, 0.63, 0, *color,
+                    -0.58, 0.68, 0, *color ]
+
         super()._handleObject(self._getCustomVertices(), [])
+        super()._setDefaultShape(GL_TRIANGLE_FAN)
+
+        glEnableVertexAttribArray(0)
+        #glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
+
+        glEnableVertexAttribArray(2)
+        #glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(12))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
 
     def _getCustomVertices(self):
-        if self.__Daytime == True:
-            color = [173/255, 203/255, 227/255] # blue
-        else:
-            color = [0/255, 3/255, 22/255] # midnight blue
+        color = [1,1,1] # midnight green
+        PI = 3.14159265358979323846264
+        statcky=60 #divide into 60 parts
+        angleHy = ( 2 * PI ) / statcky
+        NumAngleHy = 0.0 # current horizontal angle
 
-        return [-2.0, -1, 0.0, *color,
-                 5.0, -1, 0.0, *color,
-                -2.0,  1, 0.0, *color,
-                 5.0,  1, 0.0, *color]
+        d = np.array([], np.float32)
+        R = 0.1
+        x0 = 0.0
+        y0 = 0.0
+        for i in range(statcky): #Drawing a circle
+            NumAngleHy = angleHy*i  # 
+            x=R*np.cos(NumAngleHy)
+            y=R*np.sin(NumAngleHy)
+            d=np.hstack((d,np.array([x0+x,y0+y,0], np.float32) ))
 
-    def setDaytime(self, Daytime: bool):
-        self.__Daytime = Daytime
-        super()._handleObject(self._getCustomVertices(), [])
+        print('teste', np.array(d, np.float32))
+        return np.array(d, np.float32)
