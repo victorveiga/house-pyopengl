@@ -26,5 +26,6 @@ if __name__ == '__main__':
     window.addElement(shapes2D.Star, [-3,2,-3])
     window.addElement(shapes2D.Star, [-4,2,-4])
     window.addElement(shapes2D.Star, [3,2,0])
+    window.addElement(shapes2D.Moon, [2,1.0,1.00])
 
     window.execute()

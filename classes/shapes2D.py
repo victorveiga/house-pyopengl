@@ -146,7 +146,7 @@ class Star(ShapeBase, NighttimeBase):
         super()._handleObject(vertices, [])
         super()._setDefaultShape(GL_POLYGON)
 
-class Moon(ShapeBase, NighttimeBase):
+class Moon(ShapeBase):
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
         super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
         color    = [1,1,1]
@@ -157,17 +157,15 @@ class Moon(ShapeBase, NighttimeBase):
                     -0.58, 0.68, 0, *color ]
 
         super()._handleObject(self._getCustomVertices(), [])
-        super()._setDefaultShape(GL_TRIANGLE_FAN)
+        super()._setDefaultShape(GL_POLYGON)
 
         glEnableVertexAttribArray(0)
-        #glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(0))
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(0))
 
         glEnableVertexAttribArray(2)
-        #glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(12))
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(12))
 
-    def _getCustomVertices(self):
+    '''def _getCustomVertices(self):
         color = [1,1,1] # midnight green
         PI = 3.14159265358979323846264
         statcky=60 #divide into 60 parts
@@ -175,7 +173,7 @@ class Moon(ShapeBase, NighttimeBase):
         NumAngleHy = 0.0 # current horizontal angle
 
         d = np.array([], np.float32)
-        R = 0.1
+        R = 0.3
         x0 = 0.0
         y0 = 0.0
         for i in range(statcky): #Drawing a circle
@@ -184,5 +182,53 @@ class Moon(ShapeBase, NighttimeBase):
             y=R*np.sin(NumAngleHy)
             d=np.hstack((d,np.array([x0+x,y0+y,0], np.float32) ))
 
-        print('teste', np.array(d, np.float32))
-        return np.array(d, np.float32)
+        return np.array(d, np.float32)'''
+    def _getCustomVertices(self):
+        return [ 3.0000001e-01 , 0.0000000e+00 , 0.0000000e+00 , 2.9835656e-01 ,
+                 3.1358540e-02 , 0.0000000e+00 , 2.9344428e-01 , 6.2373508e-02 ,
+                 0.0000000e+00 , 2.8531694e-01 , 9.2705101e-02 , 0.0000000e+00 ,
+                 2.7406365e-01 , 1.2202099e-01 , 0.0000000e+00 , 2.5980762e-01 ,
+                 1.5000001e-01 , 0.0000000e+00 , 2.4270509e-01 , 1.7633557e-01 ,
+                 0.0000000e+00 , 2.2294345e-01 , 2.0073918e-01 , 0.0000000e+00 ,
+                 2.0073918e-01 , 2.2294345e-01 , 0.0000000e+00 , 1.7633557e-01 ,
+                 2.4270509e-01 , 0.0000000e+00 , 1.5000001e-01 , 2.5980762e-01 ,
+                 0.0000000e+00 , 1.2202099e-01 , 2.7406365e-01 , 0.0000000e+00 ,
+                 9.2705101e-02 , 2.8531694e-01 , 0.0000000e+00 , 6.2373508e-02 ,
+                 2.9344428e-01 , 0.0000000e+00 , 3.1358540e-02 , 2.9835656e-01 ,
+                 0.0000000e+00 , 1.8369703e-17 , 3.0000001e-01 , 0.0000000e+00 ,
+                 -3.1358540e-02 , 2.9835656e-01 , 0.0000000e+00 , -6.2373508e-02  ,
+                 2.9344428e-01 , 0.0000000e+00 , -9.2705101e-02 ,  2.8531694e-01 ,
+                 0.0000000e+00 , -1.2202099e-01 , 2.7406365e-01 , 0.0000000e+00 ,
+                 -1.5000001e-01 , 2.5980762e-01 , 0.0000000e+00 , -1.7633557e-01 ,
+                 2.4270509e-01 , 0.0000000e+00 , -2.0073918e-01 , 2.2294345e-01 ,
+                 0.0000000e+00 , -2.2294345e-01 , 2.0073918e-01 , 0.0000000e+00 ,
+                 -2.4270509e-01 , 1.7633557e-01 , 0.0000000e+00 , -2.5980762e-01 ,
+                 1.5000001e-01 , 0.0000000e+00 , -2.7406365e-01 , 1.2202099e-01 ,
+                 0.0000000e+00 , -2.8531694e-01 , 9.2705101e-02 , 0.0000000e+00 ,
+                 -2.9344428e-01 , 6.2373508e-02 , 0.0000000e+00 , -2.9835656e-01 ,
+                 3.1358540e-02 , 0.0000000e+00 , -3.0000001e-01 , 3.6739406e-17 ,
+                 0.0000000e+00 , -2.9835656e-01 , -3.1358540e-02 , 0.0000000e+00 ,
+                 -2.9344428e-01 , -6.2373508e-02 , 0.0000000e+00 , -2.8531694e-01 ,
+                 -9.2705101e-02 , 0.0000000e+00 , -2.7406365e-01 , -1.2202099e-01 ,
+                 0.0000000e+00 , -2.5980762e-01 , -1.5000001e-01 , 0.0000000e+00 ,
+                 -2.4270509e-01 , -1.7633557e-01 , 0.0000000e+00 , -2.2294345e-01 ,
+                 -2.0073918e-01 , 0.0000000e+00 , -2.0073918e-01 , -2.2294345e-01 ,
+                 0.0000000e+00 , -1.7633557e-01 , -2.4270509e-01 ,  0.0000000e+00 ,
+                 -1.5000001e-01 , -2.5980762e-01 , 0.0000000e+00 , -1.2202099e-01 ,
+                 -2.7406365e-01 , 0.0000000e+00 , -9.2705101e-02 , -2.8531694e-01 ,
+                 0.0000000e+00 , -6.2373508e-02 , -2.9344428e-01 , 0.0000000e+00 ,
+                 -3.1358540e-02 , -2.9835656e-01 , 0.0000000e+00 , -5.5109105e-17 ,
+                 -3.0000001e-01 , 0.0000000e+00 , 3.1358540e-02 , -2.9835656e-01 ,
+                 0.0000000e+00 , 6.2373508e-02 , -2.9344428e-01 , 0.0000000e+00 ,
+                 9.2705101e-02 , -2.8531694e-01 , 0.0000000e+00 , 1.2202099e-01 ,
+                 -2.7406365e-01 , 0.0000000e+00 , 1.5000001e-01 , -2.5980762e-01 ,
+                 0.0000000e+00 , 1.7633557e-01 , -2.4270509e-01 , 0.0000000e+00 ,
+                 2.0073918e-01 , -2.2294345e-01 , 0.0000000e+00 , 2.2294345e-01 ,
+                 -2.0073918e-01 , 0.0000000e+00 , 2.4270509e-01 , -1.7633557e-01 ,
+                 0.0000000e+00 , 2.5980762e-01 , -1.5000001e-01 , 0.0000000e+00 ,
+                 2.7406365e-01 , -1.2202099e-01 , 0.0000000e+00 , 2.8531694e-01 ,
+                 -9.2705101e-02 , 0.0000000e+00 , 2.9344428e-01 , -6.2373508e-02 ,
+                 0.0000000e+00 , 2.9835656e-01 , -3.1358540e-02 , 0.0000000e+00]
+
+    def draw(self):
+        super().draw()
