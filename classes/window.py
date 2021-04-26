@@ -3,7 +3,7 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 import OpenGL.GLUT as glut
 import pyrr
-from .shapes2D import DayNightTimeBase
+from .parents import DayNightTimeBase
 
 vertex_src = """
 # version 330
