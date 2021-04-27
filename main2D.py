@@ -1,6 +1,5 @@
 from classes.window import Window
 import classes.shapes2D as shapes2D
-import classes.shapes3D as shapes3D
 
 if __name__ == '__main__':
     window = Window(1300, 768, 'House 2D simulation')
