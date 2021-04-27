@@ -146,89 +146,77 @@ class Star(ShapeBase, NighttimeBase):
         super()._handleObject(vertices, [])
         super()._setDefaultShape(GL_POLYGON)
 
-class Moon(ShapeBase):
+class Moon(ShapeBase, NighttimeBase):
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
         super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
-        color    = [1,1,1]
-        vertices = [-0.60, 0.77, 0, *color,
-                    -0.68, 0.77, 0, *color,
-                    -0.70, 0.68, 0, *color,
-                    -0.64, 0.63, 0, *color,
-                    -0.58, 0.68, 0, *color ]
+        quad_vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
+                          0.5, -0.5,  0.5, 1.0, 0.0,
+                          0.5,  0.5,  0.5, 1.0, 1.0,
+                         -0.5,  0.5,  0.5, 0.0, 1.0,]
 
-        super()._handleObject(self._getCustomVertices(), [])
-        super()._setDefaultShape(GL_POLYGON)
+        quad_indices = [0, 1, 2, 2, 3, 0]
+        super()._handleObject(quad_vertices, quad_indices)
 
         glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(0))
 
-        glEnableVertexAttribArray(2)
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 6, ctypes.c_void_p(12))
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(12))
 
-    '''def _getCustomVertices(self):
-        color = [1,1,1] # midnight green
-        PI = 3.14159265358979323846264
-        statcky=60 #divide into 60 parts
-        angleHy = ( 2 * PI ) / statcky
-        NumAngleHy = 0.0 # current horizontal angle
-
-        d = np.array([], np.float32)
-        R = 0.3
-        x0 = 0.0
-        y0 = 0.0
-        for i in range(statcky): #Drawing a circle
-            NumAngleHy = angleHy*i  # 
-            x=R*np.cos(NumAngleHy)
-            y=R*np.sin(NumAngleHy)
-            d=np.hstack((d,np.array([x0+x,y0+y,0], np.float32) ))
-
-        return np.array(d, np.float32)'''
-    def _getCustomVertices(self):
-        return [ 3.0000001e-01 , 0.0000000e+00 , 0.0000000e+00 , 2.9835656e-01 ,
-                 3.1358540e-02 , 0.0000000e+00 , 2.9344428e-01 , 6.2373508e-02 ,
-                 0.0000000e+00 , 2.8531694e-01 , 9.2705101e-02 , 0.0000000e+00 ,
-                 2.7406365e-01 , 1.2202099e-01 , 0.0000000e+00 , 2.5980762e-01 ,
-                 1.5000001e-01 , 0.0000000e+00 , 2.4270509e-01 , 1.7633557e-01 ,
-                 0.0000000e+00 , 2.2294345e-01 , 2.0073918e-01 , 0.0000000e+00 ,
-                 2.0073918e-01 , 2.2294345e-01 , 0.0000000e+00 , 1.7633557e-01 ,
-                 2.4270509e-01 , 0.0000000e+00 , 1.5000001e-01 , 2.5980762e-01 ,
-                 0.0000000e+00 , 1.2202099e-01 , 2.7406365e-01 , 0.0000000e+00 ,
-                 9.2705101e-02 , 2.8531694e-01 , 0.0000000e+00 , 6.2373508e-02 ,
-                 2.9344428e-01 , 0.0000000e+00 , 3.1358540e-02 , 2.9835656e-01 ,
-                 0.0000000e+00 , 1.8369703e-17 , 3.0000001e-01 , 0.0000000e+00 ,
-                 -3.1358540e-02 , 2.9835656e-01 , 0.0000000e+00 , -6.2373508e-02  ,
-                 2.9344428e-01 , 0.0000000e+00 , -9.2705101e-02 ,  2.8531694e-01 ,
-                 0.0000000e+00 , -1.2202099e-01 , 2.7406365e-01 , 0.0000000e+00 ,
-                 -1.5000001e-01 , 2.5980762e-01 , 0.0000000e+00 , -1.7633557e-01 ,
-                 2.4270509e-01 , 0.0000000e+00 , -2.0073918e-01 , 2.2294345e-01 ,
-                 0.0000000e+00 , -2.2294345e-01 , 2.0073918e-01 , 0.0000000e+00 ,
-                 -2.4270509e-01 , 1.7633557e-01 , 0.0000000e+00 , -2.5980762e-01 ,
-                 1.5000001e-01 , 0.0000000e+00 , -2.7406365e-01 , 1.2202099e-01 ,
-                 0.0000000e+00 , -2.8531694e-01 , 9.2705101e-02 , 0.0000000e+00 ,
-                 -2.9344428e-01 , 6.2373508e-02 , 0.0000000e+00 , -2.9835656e-01 ,
-                 3.1358540e-02 , 0.0000000e+00 , -3.0000001e-01 , 3.6739406e-17 ,
-                 0.0000000e+00 , -2.9835656e-01 , -3.1358540e-02 , 0.0000000e+00 ,
-                 -2.9344428e-01 , -6.2373508e-02 , 0.0000000e+00 , -2.8531694e-01 ,
-                 -9.2705101e-02 , 0.0000000e+00 , -2.7406365e-01 , -1.2202099e-01 ,
-                 0.0000000e+00 , -2.5980762e-01 , -1.5000001e-01 , 0.0000000e+00 ,
-                 -2.4270509e-01 , -1.7633557e-01 , 0.0000000e+00 , -2.2294345e-01 ,
-                 -2.0073918e-01 , 0.0000000e+00 , -2.0073918e-01 , -2.2294345e-01 ,
-                 0.0000000e+00 , -1.7633557e-01 , -2.4270509e-01 ,  0.0000000e+00 ,
-                 -1.5000001e-01 , -2.5980762e-01 , 0.0000000e+00 , -1.2202099e-01 ,
-                 -2.7406365e-01 , 0.0000000e+00 , -9.2705101e-02 , -2.8531694e-01 ,
-                 0.0000000e+00 , -6.2373508e-02 , -2.9344428e-01 , 0.0000000e+00 ,
-                 -3.1358540e-02 , -2.9835656e-01 , 0.0000000e+00 , -5.5109105e-17 ,
-                 -3.0000001e-01 , 0.0000000e+00 , 3.1358540e-02 , -2.9835656e-01 ,
-                 0.0000000e+00 , 6.2373508e-02 , -2.9344428e-01 , 0.0000000e+00 ,
-                 9.2705101e-02 , -2.8531694e-01 , 0.0000000e+00 , 1.2202099e-01 ,
-                 -2.7406365e-01 , 0.0000000e+00 , 1.5000001e-01 , -2.5980762e-01 ,
-                 0.0000000e+00 , 1.7633557e-01 , -2.4270509e-01 , 0.0000000e+00 ,
-                 2.0073918e-01 , -2.2294345e-01 , 0.0000000e+00 , 2.2294345e-01 ,
-                 -2.0073918e-01 , 0.0000000e+00 , 2.4270509e-01 , -1.7633557e-01 ,
-                 0.0000000e+00 , 2.5980762e-01 , -1.5000001e-01 , 0.0000000e+00 ,
-                 2.7406365e-01 , -1.2202099e-01 , 0.0000000e+00 , 2.8531694e-01 ,
-                 -9.2705101e-02 , 0.0000000e+00 , 2.9344428e-01 , -6.2373508e-02 ,
-                 0.0000000e+00 , 2.9835656e-01 , -3.1358540e-02 , 0.0000000e+00]
+        load_texture("textures/moon.png", super()._getTexture())
 
     def draw(self):
-        super().draw()
+        glBindVertexArray(self._VAO)
+        glBindTexture(GL_TEXTURE_2D, self._texture)
+        glUniformMatrix4fv(self._model_loc, 1, GL_FALSE, self._position)
+        glDrawElements(GL_TRIANGLES, len(self.indices), GL_UNSIGNED_INT, None)
+
+class Cloud(ShapeBase, DaytimeBase):
+    def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        quad_vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
+                          1, -0.5,  0.5, 1.0, 0.0,
+                          0.5,  0.5,  0.5, 1.0, 1.0,
+                         -1,  0.5,  0.5, 0.0, 1.0,]
+
+        quad_indices = [0, 1, 2, 2, 3, 0]
+        super()._handleObject(quad_vertices, quad_indices)
+
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(0))
+
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(12))
+
+        load_texture("textures/cloud.png", super()._getTexture())
+
+    def draw(self):
+        glBindVertexArray(self._VAO)
+        glBindTexture(GL_TEXTURE_2D, self._texture)
+        glUniformMatrix4fv(self._model_loc, 1, GL_FALSE, self._position)
+        glDrawElements(GL_TRIANGLES, len(self.indices), GL_UNSIGNED_INT, None)
+
+class Sun(ShapeBase, DaytimeBase):
+    def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        quad_vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
+                          0.5, -0.5,  0.5, 1.0, 0.0,
+                          0.5,  0.5,  0.5, 1.0, 1.0,
+                         -0.5,  0.5,  0.5, 0.0, 1.0,]
+
+        quad_indices = [0, 1, 2, 2, 3, 0]
+        super()._handleObject(quad_vertices, quad_indices)
+
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(0))
+
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, self.vertices.itemsize * 5, ctypes.c_void_p(12))
+
+        load_texture("textures/sun.png", super()._getTexture())
+
+    def draw(self):
+        glBindVertexArray(self._VAO)
+        glBindTexture(GL_TEXTURE_2D, self._texture)
+        glUniformMatrix4fv(self._model_loc, 1, GL_FALSE, self._position)
+        glDrawElements(GL_TRIANGLES, len(self.indices), GL_UNSIGNED_INT, None)
