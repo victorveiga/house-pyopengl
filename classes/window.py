@@ -3,7 +3,7 @@ from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 import OpenGL.GLUT as glut
 import pyrr
-from .parents import DayNightTimeBase, DaytimeBase, NighttimeBase
+from .parents import DayNightTimeBase, DaytimeBase, NighttimeBase, UseColorType
 import numpy as np
 
 vertex_src = """
@@ -36,18 +36,18 @@ in vec3 v_color;
 
 out vec4 out_color;
 uniform int switcher;
-
+uniform ivec3 icolor;
 uniform sampler2D s_texture;
 
 void main()
 {
     if (switcher == 0){
         out_color = texture(s_texture, v_texture);
+    } else if (switcher == 1){
+        out_color = vec4(v_color, 1.0);           
+    } else if (switcher == 2) {
+        out_color = vec4(icolor.r/255.0, icolor.g/255.0, icolor.b/255.0, 1.0);
     }
-    else if (switcher == 1){
-        out_color = vec4(v_color, 1.0);   
-    }
-
 }
 """
 
@@ -87,10 +87,11 @@ class Window:
         # eye, target, up
         self.view = pyrr.matrix44.create_look_at(pyrr.Vector3([0, 0, 4]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
 
-        self.model_loc = glGetUniformLocation(shader, "model")
-        self.proj_loc = glGetUniformLocation(shader, "projection")
-        self.view_loc = glGetUniformLocation(shader, "view")
+        self.model_loc    = glGetUniformLocation(shader, "model")
+        self.proj_loc     = glGetUniformLocation(shader, "projection")
+        self.view_loc     = glGetUniformLocation(shader, "view")
         self.switcher_loc = glGetUniformLocation(shader, "switcher")
+        self.icolor_loc   = glGetUniformLocation(shader, "icolor")
 
         glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, self.projection)
         glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, self.view)
@@ -134,8 +135,8 @@ class Window:
         projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, 0.1, 100)
         glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, projection)
 
-    def addElement(self, element, cordinates):
-        self.__ElementsList.append(element(self.model_loc, self.switcher_loc, cordinates))
+    def addElement(self, element, cordinates): 
+        self.__ElementsList.append(element(pModel_loc=self.model_loc, pSwitcher_loc=self.switcher_loc, pCordinates=cordinates, pColor_loc=self.icolor_loc))
 
     def execute(self):
         glut.glutMainLoop()

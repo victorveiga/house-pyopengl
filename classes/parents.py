@@ -12,6 +12,9 @@ class DaytimeBase:
 class NighttimeBase:
     pass
 
+class UseColorType:
+    pass
+
 class ShapeBase:
     def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
         self.vertices = None
