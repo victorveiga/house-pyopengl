@@ -3,14 +3,21 @@ from math import sin, cos, radians
 
 class Camera:
     def __init__(self):
-        self.camera_pos = Vector3([0.0, 4.0, 3.0])
-        self.camera_front = Vector3([0.0, 0.0, -1.0])
-        self.camera_up = Vector3([0.0, 1.0, 0.0])
-        self.camera_right = Vector3([1.0, 0.0, 0.0])
+        self.setInitCamera()
+        self.mouse_sensitivity = 0.10
+        self.jaw               = -90
+        self.pitch             = 0
 
-        self.mouse_sensitivity = 0.25
-        self.jaw = -90
-        self.pitch = 0
+    def setInitCamera(self):
+        '''self.camera_pos   = Vector3([1.0, 2.0, 10.0])
+        self.camera_front = Vector3([-0.2, 0.0, -3.0])
+        self.camera_up    = Vector3([0.0, 1.0, 0.0])
+        self.camera_right = Vector3([1.0, 0.0, 0.0])'''
+
+        self.camera_pos   = Vector3([3.6, 2, 11.3])
+        self.camera_front = Vector3([-0.32053047,  0.02268733, -0.94696647])
+        self.camera_up    = Vector3([0.007, 1, 0.02])
+        self.camera_right = Vector3([ 0.95,  0.0 , -0.3])
 
     def get_view_matrix(self):
         return matrix44.create_look_at(self.camera_pos, self.camera_pos + self.camera_front, self.camera_up)

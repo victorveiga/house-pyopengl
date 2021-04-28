@@ -5,7 +5,7 @@ import numpy as np
 
 class Roof1(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [54/255, 119/255, 31/255]
         vertices = [-0.8, -0.5, 0.0, *color,
                     0.5, -0.5, 0.0, *color,
@@ -17,7 +17,7 @@ class Roof1(ShapeBase):
 
 class Roof2(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [90/255, 138/255, 207/255]
         vertices = [-0.5, -0.5, 0.0, *color,
                      2, -0.5, 0.0, *color,
@@ -28,7 +28,7 @@ class Roof2(ShapeBase):
 
 class Wall1(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [182/255, 81/255, 87/255]
         vertices = [-0.8, -0.5, 0.0, *color,
                      0.5, -0.5, 0.0, *color,
@@ -39,7 +39,7 @@ class Wall1(ShapeBase):
 
 class Wall2(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [31/255, 58/255, 84/255]
         vertices = [-0.5, -0.5, 0.0, *color,
                      2, -0.5, 0.0, *color,
@@ -50,7 +50,7 @@ class Wall2(ShapeBase):
 
 class Door(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [168/255, 87/255, 215/255]
         vertices = [-0.2, -0.5, 0.0, *color,
                      0.2, -0.5, 0.0, *color,
@@ -61,7 +61,7 @@ class Door(ShapeBase):
 
 class DoorHandle(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [93/255, 162/255, 204/255]
         vertices = [-0.03, -0.03, 0.0, *color,
                      0.03, -0.03, 0.0, *color,
@@ -72,7 +72,7 @@ class DoorHandle(ShapeBase):
 
 class Path(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [71/255, 106/255, 143/255]
         vertices = [-0.6, -0.6, 0.0, *color,
                      0, -0.6, 0.0, *color,
@@ -83,7 +83,7 @@ class Path(ShapeBase):
 
 class WindowObj(ShapeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         quad_vertices = [-0.2, -0.1, 0, 0.0, 0.0,
                           0.4, -0.1, 0, 1.0, 0.0,
                           0.4, 0.3, 0, 1.0, 1.0,
@@ -109,7 +109,7 @@ class WindowObj(ShapeBase):
 class Garden(ShapeBase, DayNightTimeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
         self.__Daytime = True
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         super()._handleObject(self._getCustomVertices(), [])
 
     def _getCustomVertices(self):
@@ -135,7 +135,7 @@ class Cloud(DaytimeBase):
 
 class Star(ShapeBase, NighttimeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         color    = [1,1,1]
         vertices = [-0.60, 0.77, 0, *color,
                     -0.68, 0.77, 0, *color,
@@ -148,7 +148,7 @@ class Star(ShapeBase, NighttimeBase):
 
 class Moon(ShapeBase, NighttimeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         quad_vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
                           0.5, -0.5,  0.5, 1.0, 0.0,
                           0.5,  0.5,  0.5, 1.0, 1.0,
@@ -173,7 +173,7 @@ class Moon(ShapeBase, NighttimeBase):
 
 class Cloud(ShapeBase, DaytimeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         quad_vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
                           1, -0.5,  0.5, 1.0, 0.0,
                           0.5,  0.5,  0.5, 1.0, 1.0,
@@ -198,7 +198,7 @@ class Cloud(ShapeBase, DaytimeBase):
 
 class Sun(ShapeBase, DaytimeBase):
     def __init__(self, pModel_loc=None, pSwitcher_loc=None, pCordinates=None, pColor_loc=None):
-        super().__init__(pModel_loc, pSwitcher_loc, pCordinates)
+        super().__init__(pModel_loc, pSwitcher_loc, pCordinates, pColor_loc)
         quad_vertices = [-0.5, -0.5,  0.5, 0.0, 0.0,
                           0.5, -0.5,  0.5, 1.0, 0.0,
                           0.5,  0.5,  0.5, 1.0, 1.0,

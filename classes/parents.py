@@ -16,7 +16,7 @@ class UseColorType:
     pass
 
 class ShapeBase:
-    def __init__(self, pModel_loc, pSwitcher_loc, pCordinates):
+    def __init__(self, pModel_loc, pSwitcher_loc, pCordinates, pColor_loc):
         self.vertices = None
         self.indices = None
 
@@ -26,6 +26,7 @@ class ShapeBase:
 
         self._model_loc    = pModel_loc
         self._switcher_loc = pSwitcher_loc
+        self._color_loc    = pColor_loc
         self._position     = None
         self._texture      = glGenTextures(1)
         self._defaultShape = GL_TRIANGLE_STRIP

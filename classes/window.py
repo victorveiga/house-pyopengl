@@ -5,6 +5,7 @@ import OpenGL.GLUT as glut
 import pyrr
 from .parents import DayNightTimeBase, DaytimeBase, NighttimeBase, UseColorType
 import numpy as np
+from utils.camera import Camera
 
 vertex_src = """
 # version 330
@@ -52,8 +53,9 @@ void main()
 """
 
 class Window:
-    def __init__(self, width: int, height: int, title: str):
-        self.__Daytime = True
+    def __init__(self, width: int, height: int, title: str, camera: bool = False):
+        self.__Daytime      = True
+        self.__enableCamera = camera
 
         glut.glutInit()
         glut.glutInitDisplayMode(glut.GLUT_DOUBLE | glut.GLUT_RGBA)
@@ -62,7 +64,9 @@ class Window:
         glut.glutCreateWindow(title)
         glut.glutReshapeFunc(self.__window_resize)
         glut.glutDisplayFunc(self.__display)
-        glut.glutKeyboardFunc(self.__keyboard)
+        glut.glutKeyboardFunc(self.__keyboardDown)
+        glut.glutKeyboardUpFunc(self.__keyboardUp)
+        glut.glutMotionFunc(self.__mouse_look_clb)
 
         self._create_shader()
         self.__setSky(True)
@@ -71,6 +75,14 @@ class Window:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         self.__ElementsList = []
+        self.__camera       = Camera()
+        self.__lastX        = width / 2
+        self.__lastY        = height / 2
+        self.__first_mouse  = True
+        self.__left         = False
+        self.__right        = False
+        self.__forward      = False
+        self.__backward     = False
 
     def __setSky(self, Daytime:bool):
         if (Daytime == True):
@@ -96,21 +108,66 @@ class Window:
         glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, self.projection)
         glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, self.view)
 
-    def __keyboard(self, key, x, y ):
+    def __keyboardDown(self, key, x, y ):
         if key == b'\x1b': # ESC key pressed
             sys.exit()
 
+        if key.lower() == b'w':
+            self.__forward = True
+        if key.lower() == b's':
+            self.__backward = True
+        if key.lower() == b'a':
+            self.__left = True
+        if key.lower() == b'd':
+            self.__right = True
+
+        if key.lower() == b' ':
+            self.__camera.setInitCamera()
+
         if key.lower() == b'n': # N key pressed
             self.__Daytime = False
-            self.__display()
 
         if key.lower() == b'd': # D key pressed
             self.__Daytime = True
-            self.__display()
+        
+        self.__display()
+
+    def __keyboardUp(self, key, x, y):
+        self.__forward, self.__backward, self.__left, self.__right = False, False, False, False
+
+    def __do_movement(self):
+        if self.__left:
+            self.__camera.process_keyboard("LEFT", 0.05)
+        if self.__right:
+            self.__camera.process_keyboard("RIGHT", 0.05)
+        if self.__forward:
+            self.__camera.process_keyboard("FORWARD", 0.05)
+        if self.__backward:
+            self.__camera.process_keyboard("BACKWARD", 0.05)
+
+    #def __mouse_look_clb(self, button, state, xpos, ypos):
+    def __mouse_look_clb(self, xpos, ypos):
+        if self.__first_mouse == True:
+            self.__lastX = xpos
+            self.__lastY = ypos
+            self.__first_mouse = False
+
+        xoffset = xpos - self.__lastX
+        yoffset = self.__lastY - ypos
+
+        self.__lastX = xpos
+        self.__lastY = ypos
+
+        self.__camera.process_mouse_movement(xoffset, yoffset)
 
     def __display(self):
         self.__setSky(self.__Daytime)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+        if self.__enableCamera == True:
+            self.__do_movement()
+            view = self.__camera.get_view_matrix()
+            glUniformMatrix4fv(self.view_loc, 1, GL_FALSE, view)
 
         for element in self.__ElementsList:
 
