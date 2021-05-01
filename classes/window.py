@@ -70,7 +70,7 @@ class Window:
         glut.glutMotionFunc(self.__mouse_look_clb)
 
         self._create_shader()
-        self.__setSky(True)
+        self.setSky(True)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -85,7 +85,7 @@ class Window:
         self.__forward      = False
         self.__backward     = False
 
-    def __setSky(self, Daytime:bool):
+    def setSky(self, Daytime:bool):
         if (Daytime == True):
             glClearColor(173/255, 203/255, 227/255, 1) # blue sky
         else:
@@ -122,8 +122,20 @@ class Window:
         if key.lower() == b'd':
             self.__right = True
 
-        if key.lower() == b' ':
-            self.__camera.setInitCamera()
+        if key.lower() == b'1' or key.lower() == b'f':
+            self.__camera.setCamera1()
+
+        if key.lower() == b'2' or key.lower() == b'e':
+            self.__camera.setCamera2()
+
+        if key.lower() == b'3' or key.lower() == b'r':
+            self.__camera.setCamera3()
+
+        if key.lower() == b'4' or key.lower() == b't':
+            self.__camera.setCamera4()
+
+        if key.lower() == b'5' or key.lower() == b'c':
+            self.__camera.setCamera5()
 
         if key.lower() == b'n': # N key pressed
             self.__Daytime = False
@@ -162,7 +174,7 @@ class Window:
         self.__camera.process_mouse_movement(xoffset, yoffset)
 
     def __display(self):
-        self.__setSky(self.__Daytime)
+        self.setSky(self.__Daytime)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         if self.__enableCamera == True:
