@@ -1,6 +1,8 @@
 multipledispatch==0.6.0
 numpy==1.19.5
+glumpy==1.1.0
 Pillow==8.2.0
+PyGLM==1.99.3
 PyOpenGL==3.1.5
 PyOpenGL-accelerate==3.1.5
 six==1.15.0
