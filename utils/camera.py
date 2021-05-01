@@ -1,4 +1,5 @@
-from pyrr import Vector3, vector, vector3, matrix44
+import glm
+import numpy as np
 from math import sin, cos, radians
 
 class Camera:
@@ -9,18 +10,13 @@ class Camera:
         self.pitch             = 0
 
     def setInitCamera(self):
-        '''self.camera_pos   = Vector3([1.0, 2.0, 10.0])
-        self.camera_front = Vector3([-0.2, 0.0, -3.0])
-        self.camera_up    = Vector3([0.0, 1.0, 0.0])
-        self.camera_right = Vector3([1.0, 0.0, 0.0])'''
-
-        self.camera_pos   = Vector3([3.6, 2, 11.3])
-        self.camera_front = Vector3([-0.32053047,  0.02268733, -0.94696647])
-        self.camera_up    = Vector3([0.007, 1, 0.02])
-        self.camera_right = Vector3([ 0.95,  0.0 , -0.3])
+        self.camera_pos   = glm.vec3(3.6, 2, 11.3)
+        self.camera_front = glm.vec3(-0.32053047,  0.02268733, -0.94696647)
+        self.camera_up    = glm.vec3(0.007, 1, 0.02)
+        self.camera_right = glm.vec3(0.95,  0.0 , -0.3)
 
     def get_view_matrix(self):
-        return matrix44.create_look_at(self.camera_pos, self.camera_pos + self.camera_front, self.camera_up)
+        return np.array(glm.lookAt(self.camera_pos, self.camera_pos + self.camera_front, self.camera_up), dtype=np.float32)
 
     def process_mouse_movement(self, xoffset, yoffset, constrain_pitch=True):
         xoffset *= self.mouse_sensitivity
@@ -38,14 +34,14 @@ class Camera:
         self.update_camera_vectors()
 
     def update_camera_vectors(self):
-        front = Vector3([0.0, 0.0, 0.0])
+        front = glm.vec3(0.0, 0.0, 0.0)
         front.x = cos(radians(self.jaw)) * cos(radians(self.pitch))
         front.y = sin(radians(self.pitch))
         front.z = sin(radians(self.jaw)) * cos(radians(self.pitch))
 
-        self.camera_front = vector.normalise(front)
-        self.camera_right = vector.normalise(vector3.cross(self.camera_front, Vector3([0.0, 1.0, 0.0])))
-        self.camera_up = vector.normalise(vector3.cross(self.camera_right, self.camera_front))
+        self.camera_front = glm.normalize(front)
+        self.camera_right = glm.normalize(glm.cross(self.camera_front, glm.vec3(0.0, 1.0, 0.0)))
+        self.camera_up = glm.normalize(glm.cross(self.camera_right, self.camera_front))
 
     # Camera method for the WASD movement
     def process_keyboard(self, direction, velocity):

@@ -1,4 +1,4 @@
-import pyrr
+import glm
 from OpenGL.GL import *
 import numpy as np
 from utils.TextureLoader import load_texture
@@ -60,7 +60,7 @@ class ShapeBase:
         glDrawArrays(self._getDefaultShape(), 0, int(self._getVertices().size / 6))
 
     def _setPosition(self, position):
-        self._position = pyrr.matrix44.create_from_translation(pyrr.Vector3(position))
+        self._position = np.array(glm.translate(glm.mat4(1.0), glm.vec3(*position)), dtype=np.float32)
 
     def _setModel_loc(self, model_loc):
         self._model_loc = model_loc

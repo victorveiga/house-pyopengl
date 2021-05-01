@@ -1,11 +1,12 @@
 import sys
+import glm
 from OpenGL.GL import *
 from OpenGL.GL.shaders import compileProgram, compileShader
 import OpenGL.GLUT as glut
-import pyrr
 from .parents import DayNightTimeBase, DaytimeBase, NighttimeBase, UseColorType
 import numpy as np
 from utils.camera import Camera
+from utils.functions import create_perspective_projection_matrix
 
 vertex_src = """
 # version 330
@@ -94,10 +95,10 @@ class Window:
         shader = compileProgram(compileShader(vertex_src, GL_VERTEX_SHADER), compileShader(fragment_src, GL_FRAGMENT_SHADER))
 
         glUseProgram(shader)
-        self.projection = pyrr.matrix44.create_perspective_projection_matrix(45, 1280 / 720, 0.1, 100)
+        self.projection = create_perspective_projection_matrix(45, 1280 / 720, 0.1, 100)
 
         # eye, target, up
-        self.view = pyrr.matrix44.create_look_at(pyrr.Vector3([0, 0, 4]), pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
+        self.view = np.array(glm.lookAt(glm.vec3(0.0, 0.0, 4.0), glm.vec3(0.0, 0.0, 0.0), glm.vec3(0.0, 1.0, 0.0)), dtype=np.float32)
 
         self.model_loc    = glGetUniformLocation(shader, "model")
         self.proj_loc     = glGetUniformLocation(shader, "projection")
@@ -189,7 +190,7 @@ class Window:
 
     def __window_resize(self, width,height):
         glViewport(0, 0, width, height)
-        projection = pyrr.matrix44.create_perspective_projection_matrix(45, width / height, 0.1, 100)
+        projection = create_perspective_projection_matrix(45, width / height, 0.1, 100)
         glUniformMatrix4fv(self.proj_loc, 1, GL_FALSE, projection)
 
     def addElement(self, element, cordinates): 
