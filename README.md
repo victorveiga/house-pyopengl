@@ -6,7 +6,20 @@ This project was created with the objective of composing the evaluation note of 
 ### 2D simulation:
 ![](https://github.com/victorveiga/house-pyopengl/blob/master/assets/house-2D-simulation.gif)
 <p>
-Press the "d" key for Daytime period and press "n" for Nighttime period
+Press the "d" key for Daytime period and press "n" for Nighttime period.
+  
+### 3D simulation:
+![](https://github.com/victorveiga/house-pyopengl/blob/master/assets/house-3D%20simulation.gif)
+<p>
+- Press the "f" key to show the house´s front
+<p>
+- Press the "t" key to show the house´s back
+<p>
+- Press the "e" key to show the house´s left side
+<p>
+- Press the "r" key to show the house´s right side
+<p>
+- Press the "c" key to show the house´s top side
 
 ## Installation
 
@@ -26,4 +39,4 @@ Press the "d" key for Daytime period and press "n" for Nighttime period
 
 ## Starting simulation
 
-* Simply run the "run" command for 2D simulation and "run2" for 3D simularion. (Warning: The virtual environment activate is required).
+* Simply run the "run" command for 2D simulation and "run2" for 3D simulation. (Warning: The virtual environment activate is required).
